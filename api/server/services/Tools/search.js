@@ -83,7 +83,7 @@ function createOnSearchResults(res, streamId = null) {
 
     const attachment = buildAttachment(context);
 
-    if (!res.headersSent) {
+    if (!streamId && !res.headersSent) {
       return attachment;
     }
     writeAttachment(res, streamId, attachment);
@@ -107,6 +107,10 @@ function createOnSearchResults(res, streamId = null) {
       data[type][index].processed = true;
     }
 
+    if (!streamId && res.headersSent) {
+      return;
+    }
+    
     const attachment = buildAttachment(context);
     writeAttachment(res, streamId, attachment);
   }
